@@ -1,0 +1,141 @@
+	
+@startuml ClassUML
+
+class GameInstance
+{
+    -OptionManager : UObject
+    -UIMangaer : UObject
+
+    +GetOptionManager() const : UObject
+    +GetUIManager() const : UObject
+}
+
+class AHUDCanvas
+{
+    +DrawHUD() : void
+    +StartSelection() : void
+    +StopSelection() : void
+}
+
+class AMainPlayerController
+{
+    -SelectedUnits: TArray<UnitBase>
+    --
+    .. Bind ..
+    +ZoomInOut(AxisValue : float) : void
+    +StartSelection() : void
+    +StopSelection() : void
+}
+
+class AMainCamera 
+{
+    -SpringArmComponent : USpringArmComponent*
+    -CameraComponent : UCameraComponent*
+    -MaxArmLength : int32
+    -MinArmLength : int32
+    -MaxZoomVector : float
+    -ZoomVector : float
+    -MaxCameraMovingSpeed : float
+    -MinCameraMovingSpeed : float
+    --
+    +Tick(DeltaTime : float) : void
+    +ZoomInOut(AxisValue : float) : void
+    .. Private ..
+    -GetCameraMvoingSpeed() const : float
+    -MoveForward(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
+    -MoveBackward(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
+    -MoveLeft(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
+    -MoveRight(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
+}
+
+class AMainPlayerState
+{
+    -Tribe : FText
+    -int32 Food;
+    -int32 Wood;
+    -int32 Gold;
+    -int32 SupplyCount;
+    -int32 MaxSupplyCount;
+
+    --
+    .. getter ..
+    +GetTribe() const : FText&
+    +GetFood() const : int32
+    +GetWood() const : int32
+    +GetGold() const : int32
+    +GetSupplyCount() const : int32
+    +GetMaxSupplyCount() const : int32
+    .. setter ..
+    +SetFood(Value : const int32) : void
+    +SetWood(Value : const int32) : void
+    +SetGold(Value : const int32) : void
+    +SetSupplyCount(Value : const int32) : void
+    +SetMaxSupplyCount(Value : const int32) : void
+}
+
+class FUnitStatus <<struct>>
+{
+    +MaxHP : int32
+    +HP : int32
+    +MaxMP : int32
+    +MP : int32
+    +ATK : int32
+    +DEF : int32
+    +Sight : int32
+}
+
+interface Selectable
+{
+    +OnSelected() : void
+    +OnNotSelected() : void
+}
+
+class AUnitBase
+{
+    #Name : FName
+    #Tribe : ETribe
+    #Type : EUnitType
+    #Status : FUnitStatus
+    #bIsSelected : bool
+    #DecalComponent : UDecalComponent*
+
+    --
+    .. getter ..
+    +GetName() const : FName
+    +GetTribe() const : ETribe
+    +GetType() const : EUnitType
+    +GetMaxHP() const : int32
+    +GetHP() const : int32
+    +GetMaxMP() const : int32
+    +GetMP() const : int32
+    +GetATK() const : int32
+    +GetDEF() const : int32
+    +GetSight() const : int32
+    +GetDecalComponent() : UDecalComponent&
+
+    ..setter..
+    +SetMaxHP(Value : int32) : void
+    +SetHP(Value : int32) : void
+    +SetMaxMP(Value : int32) : void
+    +SetMP(MValue : int32) : void
+    +SetATK(Value : int32) : void
+    +SetDEF(Value : int32) : void
+    +SetSight(Value : int32) : void
+    
+    ..
+    +OnSelected() : void
+    +OnNotSelected() : void
+}
+
+AHUD <|-- AHUDCanvas
+AActor <|-- AMainCamera
+AActor <|-- AUnitBase
+Selectable <|-- AUnitBase
+FUnitStatus <-- AUnitBase
+APlayerController <|-- AMainPlayerController
+APlayerState <|-- AMainPlayerState
+AMainPlayerState "1" - "1" AMainPlayerController
+AMainPlayerController "1" - "1" AMainCamera
+AMainPlayerController "1" - "1" AHUDCanvas
+
+@enduml
