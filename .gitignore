@@ -4,6 +4,8 @@ Intermediate
 Saved
 .vscode
 .vs
+Content/*
+!Content/RTS
 *.VC.db
 *.opensdf
 *.opendb
