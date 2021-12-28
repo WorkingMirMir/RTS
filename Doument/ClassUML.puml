@@ -22,7 +22,7 @@ class AMainPlayerController
     -SelectedUnits: TArray<UnitBase>
     --
     .. Bind ..
-    +ZoomInOut(AxisValue : float) : void
+    +ZoomInOut(AxisValue : const float) : void
     +StartSelection() : void
     +StopSelection() : void
 }
@@ -31,17 +31,17 @@ class AMainCamera
 {
     -SpringArmComponent : USpringArmComponent*
     -CameraComponent : UCameraComponent*
-    -MaxArmLength : int32
-    -MinArmLength : int32
+    -MaxSpringArmLength : int32
+    -MinSpringArmLength : int32
     -MaxZoomVector : float
     -ZoomVector : float
     -MaxCameraMovingSpeed : float
     -MinCameraMovingSpeed : float
     --
     +Tick(DeltaTime : float) : void
-    +ZoomInOut(AxisValue : float) : void
+    +ZoomInOut(AxisValue : const float) : void
     .. Private ..
-    -GetCameraMvoingSpeed() const : float
+    -GetCameraMovingSpeed() const : float
     -MoveForward(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
     -MoveBackward(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
     -MoveLeft(ViewportSize : const FVector2D, MousePosition : const FVector2D) void
