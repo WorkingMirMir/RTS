@@ -4,25 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
+#include "MenuWidget.h"
+
 #include "MainMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class RTS_API UMainMenu : public UUserWidget
+class RTS_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
-
-public:
-	UFUNCTION(BlueprintCallable)
-	void Setup();
-
-	UFUNCTION(BlueprintCallable)
-	void Teardown();
-
-	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
-
 protected:
 	virtual bool Initialize() override;
 

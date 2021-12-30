@@ -8,47 +8,6 @@
 #include "Components/WidgetSwitcher.h"
 #include "UObject/ConstructorHelpers.h"
 
-void UMainMenu::Setup()
-{
-	AddToViewport();
-	bIsFocusable = true;
-
-	FInputModeUIOnly inputModeData;
-	inputModeData.SetWidgetToFocus(TakeWidget());
-	inputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-
-	UWorld* const World = GetWorld();
-	if (!ensure(World != nullptr)) return;
-
-	APlayerController* const PlayerController = World->GetFirstPlayerController();
-	if (!ensure(PlayerController != nullptr)) return;
-
-	PlayerController->SetInputMode(inputModeData);
-	PlayerController->bShowMouseCursor = true;
-}
-
-void UMainMenu::Teardown()
-{	
-	RemoveFromViewport();
-
-	UWorld* const World = GetWorld();
-	if (!ensure(World != nullptr)) return;
-
-	APlayerController* const PlayerController = World->GetFirstPlayerController();
-	if (!ensure(PlayerController != nullptr)) return;
-
-	PlayerController->SetInputMode(FInputModeGameOnly());
-	PlayerController->bShowMouseCursor = false;
-}
-
-void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
-{
-	if (InLevel == nullptr && InWorld == GetWorld())
-	{
-		Teardown();
-	}
-}
-
 bool UMainMenu::Initialize()
 {
 	bool bSuccess = Super::Initialize();
