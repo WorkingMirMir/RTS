@@ -96,7 +96,6 @@ class AUnitBase
     #Tribe : ETribe
     #Type : EUnitType
     #Status : FUnitStatus
-    #bIsSelected : bool
     #DecalComponent : UDecalComponent*
 
     --
