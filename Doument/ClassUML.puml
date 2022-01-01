@@ -12,6 +12,10 @@ class GameInstance
 
 class AHUDCanvas
 {
+    -StartPosition : FVector2D
+    -EndPosition : FVector2D
+    -bIsDrawing : bool
+
     +DrawHUD() : void
     +StartSelection() : void
     +StopSelection() : void
