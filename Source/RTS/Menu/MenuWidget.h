@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
+#include "../Library/BaseGameLibrary.h"
+
 #include "MenuWidget.generated.h"
 
 /**
@@ -22,4 +25,7 @@ public:
 	virtual void Teardown();
 
 	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
+
+private:
+	FInputModeData OldInputModeData;
 };

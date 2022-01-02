@@ -8,9 +8,9 @@ void UMenuWidget::Setup()
 	AddToViewport();
 	bIsFocusable = true;
 
-	FInputModeUIOnly inputModeData;
-	inputModeData.SetWidgetToFocus(TakeWidget());
-	inputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(TakeWidget());
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 
 	UWorld* const World = GetWorld();
 	if (!ensure(World != nullptr)) return;
@@ -18,7 +18,9 @@ void UMenuWidget::Setup()
 	APlayerController* const PlayerController = World->GetFirstPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 
-	PlayerController->SetInputMode(inputModeData);
+	OldInputModeData = UBaseGameLibrary::GetCurrentInputMode(PlayerController);
+
+	PlayerController->SetInputMode(InputMode);
 	PlayerController->bShowMouseCursor = true;
 }
 
@@ -32,8 +34,29 @@ void UMenuWidget::Teardown()
 	APlayerController* const PlayerController = World->GetFirstPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 
-	PlayerController->SetInputMode(FInputModeGameOnly());
 	PlayerController->bShowMouseCursor = false;
+
+	switch (OldInputModeData.InputMode)
+	{
+	case EInputMode::GameAndUI:
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		break;
+	case EInputMode::UIOnly:
+		PlayerController->SetInputMode(FInputModeUIOnly());
+		break;
+	case EInputMode::GameOnly:
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		break;
+	default:
+		check(false);
+		break;
+	}
+	
+	UGameViewportClient* const Viewport = World->GetGameViewport();
+	if (!ensure(Viewport != nullptr)) return;
+	Viewport->SetMouseCaptureMode(OldInputModeData.MouseCaptureMode);
+	
+	OldInputModeData = FInputModeData();
 }
 
 void UMenuWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)

@@ -50,38 +50,31 @@ void AMainCamera::Tick(float DeltaTime)
 
 	UWorld* const World = GetWorld();
 	if (!ensure(World != nullptr)) return;
-	if (World)
+
+	UGameViewportClient* const Viewport = World->GetGameViewport();
+	if (!ensure(Viewport != nullptr)) return;
+
+	FVector2D MousePosition;
+	if (!Viewport->GetMousePosition(MousePosition))
 	{
-		UGameViewportClient* const Viewport = World->GetGameViewport();
-		if (!ensure(Viewport != nullptr)) return;
-
-		FVector2D MousePosition;
-		if (!Viewport->GetMousePosition(MousePosition))
-		{
-			return;
-		}
-
-		FVector2D ViewportSize;
-		Viewport->GetViewportSize(ViewportSize);
-
-		MoveForward(ViewportSize, MousePosition);
-		MoveBackward(ViewportSize, MousePosition);
-		MoveRight(ViewportSize, MousePosition);
-		MoveLeft(ViewportSize, MousePosition);
-
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, DeltaTime, FColor::Blue, FString::Printf(TEXT("%f"), GetCameraMovingSpeed()));
-		}
+		return;
 	}
+
+	FVector2D ViewportSize;
+	Viewport->GetViewportSize(ViewportSize);
+
+	MoveForward(ViewportSize, MousePosition);
+	MoveBackward(ViewportSize, MousePosition);
+	MoveRight(ViewportSize, MousePosition);
+	MoveLeft(ViewportSize, MousePosition);
 }
 
 void AMainCamera::ZoomInOut(const float AxisValue)
 {
 	checkf(MaxCameraMovingSpeed > MinCameraMovingSpeed && MaxSpringArmLength > MinSpringArmLength
 		, TEXT("MainCamera is field Value Error"));
-	
-	if (SpringArmComponent)
+
+	if (SpringArmComponent != nullptr)
 	{
 		ZoomVector = FMath::Clamp(AxisValue + ZoomVector, 0.0f, MaxZoomVector);
 		const float Distance = (MaxSpringArmLength - MinSpringArmLength) / MaxZoomVector;
@@ -136,4 +129,3 @@ void AMainCamera::MoveRight(const FVector2D ViewportSize, const FVector2D MouseP
 	DeltaVector *= ClampedFloat;
 	RootComponent->AddRelativeLocation(DeltaVector);
 }
-
