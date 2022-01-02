@@ -22,6 +22,6 @@ class RTS_API ISelectable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OnSelected() = 0;
-	virtual void OnNotSelected() = 0;
+	virtual void StartSelect() = 0;
+	virtual void StopSelect() = 0;
 };
