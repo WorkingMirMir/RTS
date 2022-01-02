@@ -8,12 +8,12 @@
 AUnitBase::AUnitBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	DecalComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("DecalComponent"));
-	DecalComponent->AttachTo(RootComponent);
+	DecalComponent->SetupAttachment(RootComponent);
 	DecalComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(-90.0f, 0.0f, 0.0f));
-	DecalComponent->SetRelativeScale3D(FVector(0.05f, 0.405f, 0.405f));
+	DecalComponent->SetRelativeScale3D(FVector(0.405f, 0.405f, 0.405f));
 	DecalComponent->SetVisibility(false);
 }
 
@@ -28,7 +28,7 @@ void AUnitBase::OnNotSelected()
 	if (!ensure(DecalComponent != nullptr)) return;
 	DecalComponent->SetVisibility(false);
 }
-
+/*
 // Called when the game starts or when spawned
 void AUnitBase::BeginPlay()
 {
@@ -49,4 +49,4 @@ void AUnitBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
+*/
