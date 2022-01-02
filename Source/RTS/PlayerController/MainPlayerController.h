@@ -31,4 +31,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StopSelect();
+
+	UFUNCTION(BlueprintCallable)
+	void MoveUnit();
+
+private:
+	TArray<class AUnitBase*> SelectedUnits;
 };
