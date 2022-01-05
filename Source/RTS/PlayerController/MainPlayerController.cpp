@@ -60,18 +60,32 @@ void AMainPlayerController::StopSelect()
 	if (HUD)
 	{
 		HUD->StopSelect();
+		SelectedUnits.Reset();
 		SelectedUnits = HUD->GetFoundUnits();
 	}
 }
 
 void AMainPlayerController::MoveUnit()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MoveUnit"));
-	for (const auto& Unit : SelectedUnits)
+	UE_LOG(LogTemp, Display, TEXT("MainPlayerController : MoveUnit"));
+	FHitResult Hit;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit);
+
+	if (Hit.IsValidBlockingHit() && Hit.bBlockingHit)
 	{
-		FHitResult Hit;
-		GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit);
-		const FVector MoveLocation = Hit.Location;
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(Unit->GetController(), MoveLocation);
+		if (Hit.GetActor()->ActorHasTag("NonSelected"))
+		{
+			for (const auto& Unit : SelectedUnits)
+			{
+				Unit->MoveToLocation(Hit.Location);
+			}
+		}
+		else
+		{
+			for (const auto& Unit : SelectedUnits)
+			{
+				Unit->MoveToLocation(Hit.GetActor()->GetActorLocation());
+			}
+		}
 	}
 }

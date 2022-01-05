@@ -26,6 +26,12 @@ public:
 	virtual void OnNotSelected();
 
 	UFUNCTION(BlueprintCallable)
+	virtual void MoveToLocation(const FVector NewTargetLocation);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void MoveToActor(AActor* const NewTargetActor);
+
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE FName GetName() const { return Name; }
 
 	UFUNCTION(BlueprintCallable)
@@ -55,11 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetSight() const { return Status.Sight; }
 
-/*
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+/*
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -82,4 +88,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UDecalComponent* DecalComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UWidgetComponent* BarWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class AUnitBaseAIController* AIController;
 };
